@@ -23,7 +23,7 @@ sa = mlrose.SARunner(
     iteration_list=[1, 10, 50, 100, 250, 500, 1000],
     max_attempts=1000,
     temperature_list=[250],
-    decay_list=[mlrose.ExpDecay],
+    decay_list=[mlrose.GeomDecay],
 )
 
 ga = mlrose.GARunner(

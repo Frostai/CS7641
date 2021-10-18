@@ -23,7 +23,7 @@ sa = mlrose.SARunner(
     iteration_list=[1, 10, 50, 100, 250, 500, 1000],
     max_attempts=1000,
     temperature_list=[250],
-    decay_list=[mlrose.ExpDecay],
+    decay_list=[mlrose.GeomDecay],
 )
 
 ga = mlrose.GARunner(
@@ -33,7 +33,7 @@ ga = mlrose.GARunner(
     iteration_list=[1, 10, 50, 100, 250, 500, 1000],
     max_attempts=1000,
     population_sizes=[200],
-    mutation_rates=[0.3],
+    mutation_rates=[0.2],
 )
 
 mimic = mlrose.MIMICRunner(
@@ -55,10 +55,10 @@ sa_run_stats, sa_run_curves = sa.run()
 print('GA')
 ga_run_stats, ga_run_curves = ga.run()
 print('MIMIC')
-mimic_run_stats, mimic_run_curves = mimic.run()
-print(mimic_run_stats)
-print(mimic_run_curves)
+# mimic_run_stats, mimic_run_curves = mimic.run()
+print(ga_run_stats)
+print(ga_run_curves)
 plot_ro_curve_df(rhc_run_curves, "Randomized Hill Climbing", 'sixpeaks')
 plot_ro_curve_df(ga_run_curves, "Genetic Algorithm", 'sixpeaks')
 plot_ro_curve_df(sa_run_curves, "Simulated Annealing", 'sixpeaks')
-plot_ro_curve_df(mimic_run_curves, "MIMIC", 'sixpeaks')
+# plot_ro_curve_df(mimic_run_curves, "MIMIC", 'sixpeaks')

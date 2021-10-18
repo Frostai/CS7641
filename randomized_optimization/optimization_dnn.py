@@ -6,7 +6,7 @@ from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 from sklearn.metrics import accuracy_score
 from sklearn.utils import shuffle
 
-from plotting import plot_nn_curve_df
+from plotting import plot_nn_curve_df, plot_learning_curve
 
 VERBOSE=True
 SEED = 42
@@ -27,7 +27,7 @@ encoder = OneHotEncoder()
 y_train_hot = encoder.fit_transform(y_train.reshape(-1, 1)).todense()
 y_test_hot = encoder.transform(y_test.reshape(-1, 1)).todense()
 
-dnn1 = mlrose.NeuralNetwork(hidden_nodes = [64,64], activation = 'relu', \
+dnn1 = mlrose.NeuralNetwork(hidden_nodes = [100,100], activation = 'relu', \
                                  algorithm = 'random_hill_climb', max_iters = 1000, \
                                  bias = True, is_classifier = True, learning_rate = 1, \
                                  early_stopping = True, max_attempts = 100, \
@@ -47,27 +47,30 @@ dnn3 = mlrose.NeuralNetwork(hidden_nodes = [100,100], activation = 'relu', \
 
 def dnnfit1():
     print('RHC Start...')
-    results1 = dnn1.fit(X_train, y_train_hot)
-    print(results1.fitness_curve)
+    # results1 = dnn1.fit(X_train, y_train_hot)
+    plots = plot_learning_curve(dnn1,"RHC", X_train, y_train_hot)
+    plots.savefig('rhc_dnn.png')
+    
+    # print(results1.fitness_curve)
     # plot_nn_curve_df(results1.fitness_curve)
     print('RHC')
-    print('Train data Score: ', dnn1.score(X_train, y_train_hot))
-    print('Test data Score', dnn1.score(X_test, y_test_hot))
+    # print('Train data Score: ', dnn1.score(X_train, y_train_hot))
+    # print('Test data Score', dnn1.score(X_test, y_test_hot))
 
 def dnnfit2():
     print('SA START...')
-    dnn2.fit(X_train, y_train_hot)
-    print('SA')
-    print('Train data Score: ', dnn2.score(X_train, y_train_hot))
-    print('Test data Score', dnn2.score(X_test, y_test_hot))
+    plots = plot_learning_curve(dnn2,"SA", X_train, y_train_hot)
+    plots.savefig('sa_dnn.png')
 
 def dnnfit3():
     print('GA START...')
-    dnn3.fit(X_train, y_train_hot)
-    print('GA')
-    print('Train data Score: ', dnn3.score(X_train, y_train_hot))
-    print('Test data Score', dnn3.score(X_test, y_test_hot))
+    plots = plot_learning_curve(dnn2,"GA", X_train, y_train_hot)
+    plots.savefig('ga_dnn.png')
+    # dnn3.fit(X_train, y_train_hot)
+    # print('GA')
+    # print('Train data Score: ', dnn3.score(X_train, y_train_hot))
+    # print('Test data Score', dnn3.score(X_test, y_test_hot))
 
-dnnfit1()
+# dnnfit1()
 dnnfit2()
 dnnfit3()
