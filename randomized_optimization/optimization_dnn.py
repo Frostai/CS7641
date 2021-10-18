@@ -1,3 +1,5 @@
+import time
+
 import pandas as pd
 import numpy as np
 import mlrose_hiive as mlrose
@@ -47,30 +49,40 @@ dnn3 = mlrose.NeuralNetwork(hidden_nodes = [100,100], activation = 'relu', \
 
 def dnnfit1():
     print('RHC Start...')
-    # results1 = dnn1.fit(X_train, y_train_hot)
-    plots = plot_learning_curve(dnn1,"RHC", X_train, y_train_hot)
-    plots.savefig('rhc_dnn.png')
-    
-    # print(results1.fitness_curve)
-    # plot_nn_curve_df(results1.fitness_curve)
+    # plots = plot_learning_curve(dnn1,"RHC", X_train, y_train_hot)
+    # plots.savefig('rhc_dnn.png')
+    start = time.time()
+    dnn1.fit(X_train, y_train_hot)
     print('RHC')
-    # print('Train data Score: ', dnn1.score(X_train, y_train_hot))
-    # print('Test data Score', dnn1.score(X_test, y_test_hot))
+    print('Train data Score: ', dnn1.score(X_train, y_train_hot))
+    print('Test data Score', dnn1.score(X_test, y_test_hot))
+    end = time.time()
+    print("RHC", end - start)
 
 def dnnfit2():
     print('SA START...')
-    plots = plot_learning_curve(dnn2,"SA", X_train, y_train_hot)
-    plots.savefig('sa_dnn.png')
+    start = time.time()
+    # plots = plot_learning_curve(dnn2,"SA", X_train, y_train_hot)
+    # plots.savefig('sa_dnn.png')
+    
+    dnn2.fit(X_train, y_train_hot)
+    print('Train data Score: ', dnn2.score(X_train, y_train_hot))
+    print('Test data Score', dnn2.score(X_test, y_test_hot))
+    end = time.time()
+    print("SA", end - start)
 
 def dnnfit3():
     print('GA START...')
-    plots = plot_learning_curve(dnn2,"GA", X_train, y_train_hot)
-    plots.savefig('ga_dnn.png')
-    # dnn3.fit(X_train, y_train_hot)
-    # print('GA')
-    # print('Train data Score: ', dnn3.score(X_train, y_train_hot))
-    # print('Test data Score', dnn3.score(X_test, y_test_hot))
+    # plots = plot_learning_curve(dnn2,"GA", X_train, y_train_hot)
+    # plots.savefig('ga_dnn.png')
+    
+    start = time.time()
+    dnn3.fit(X_train, y_train_hot)
+    print('Train data Score: ', dnn3.score(X_train, y_train_hot))
+    print('Test data Score', dnn3.score(X_test, y_test_hot))
+    end = time.time()
+    print('GA', end - start)
 
-# dnnfit1()
+dnnfit1()
 dnnfit2()
 dnnfit3()
