@@ -12,7 +12,7 @@ from sklearn.preprocessing import OneHotEncoder
 from plotting import plot_nn_curve_df, plot_learning_curve
 from clustering import em, kmeans
 
-VERBOSE=True
+VERBOSE=False
 SEED = 1337
 
 # MADELON dataset
@@ -39,7 +39,7 @@ def ica(n, X):
 def pca(n, X):
     pca = PCA(n_components=n)
     pca.fit(X)
-    return pca.transform(X), np.sum(pca.explained_variance_ratio_)
+    return pca.transform(X)
 
 def grp(n, X):
     grp = GaussianRandomProjection(n_components=n)
@@ -50,12 +50,15 @@ def kpca(n, X):
     return kpca.fit_transform(X)
 
 
-def dnn(X_y, layer_sizes=(1000)):
-    X_train, X_test, y_train, y_test = train_test_split(X_y[:, :-1], X_y[:,-1], test_size=0.4, random_state=1)
+def dnn(X, y, layer_sizes=(1000), title='', fileprefix='', saveplots=False):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=1)
     dnn = MLPClassifier(hidden_layer_sizes=layer_sizes, random_state=1,\
-    learning_rate='invscaling', max_iter=40000, tol=0.00005, n_iter_no_change=100, verbose=VERBOSE)
+    learning_rate='invscaling', max_iter=10000, tol=0.00005, n_iter_no_change=100, verbose=VERBOSE)
+    if saveplots:
+        plots = plot_learning_curve(dnn, title, X, y, n_jobs=-1)
+        plots.savefig('figures/{}_dnn.png'.format(fileprefix))
     dnn.fit(X_train, y_train)
-    print('\nPredict DNN:\n')
+    # print('\nPredict DNN:\n')
     print('Train data Score: ', dnn.score(X_train, y_train))
     print('Test data Score', dnn.score(X_test, y_test))
     
@@ -72,39 +75,43 @@ def run_experiments():
     ica_madelon = ica(8, madelon)
     ica_credit =  ica(8, credit_t)
     kmeans(50, X=ica_madelon, dataset='MADELON', filename_prefix="ica_madelon")
-    em(50, X=ica_madelon, dataset='MADELON', filename_prefix='ica_madelon')
     kmeans(50, X=ica_credit, dataset='Credit', filename_prefix="ica_credit")
-    em(50, X=ica_credit, dataset='Credit', filename_prefix='ica_credit')
+    # em(50, X=ica_madelon, dataset='MADELON', filename_prefix='ica_madelon')
+    # em(50, X=ica_credit, dataset='Credit', filename_prefix='ica_credit')
     
-    # # KPCA experiments
+    # # PCA experiments
     pca_madelon = pca(5, madelon)
     pca_credit =  pca(5, credit_t)
     kmeans(50, X=pca_madelon, dataset='MADELON', filename_prefix="pca_madelon")
-    em(50, X=pca_madelon, dataset='MADELON', filename_prefix='pca_madelon')
     kmeans(50, X=pca_credit, dataset='Credit', filename_prefix="pca_credit")
-    em(50, X=pca_credit, dataset='Credit', filename_prefix='pca_credit')
+    # em(50, X=pca_madelon, dataset='MADELON', filename_prefix='pca_madelon')
+    # em(50, X=pca_credit, dataset='Credit', filename_prefix='pca_credit')
 
     # GRP experiments
     grp_madelon = grp(5, madelon)
     grp_credit =  grp(5, credit_t)
     kmeans(50, X=grp_madelon, dataset='MADELON', filename_prefix="grp_madelon")
-    em(50, X=grp_madelon, dataset='MADELON', filename_prefix='grp_madelon')
     kmeans(50, X=grp_credit, dataset='Credit', filename_prefix="grp_credit")
-    em(50, X=grp_credit, dataset='Credit', filename_prefix='grp_credit')
+    # em(50, X=grp_madelon, dataset='MADELON', filename_prefix='grp_madelon')
+    # em(50, X=grp_credit, dataset='Credit', filename_prefix='grp_credit')
 
     # KPCA experiments
     kpca_madelon = kpca(madelon)
     kpca_credit =  kpca(credit_t)
     kmeans(50, X=kpca_madelon, dataset='MADELON', filename_prefix="kpca_madelon")
-    em(50, X=kpca_madelon, dataset='MADELON', filename_prefix='kpca_madelon')
     kmeans(50, X=kpca_credit, dataset='Credit', filename_prefix="kpca_credit")
-    em(50, X=kpca_credit, dataset='Credit', filename_prefix='kpca_credit')
+    # em(50, X=kpca_madelon, dataset='MADELON', filename_prefix='kpca_madelon')
+    # em(50, X=kpca_credit, dataset='Credit', filename_prefix='kpca_credit')
 
     # Run DNN on MADELON reduced
     # Run PCA with 5 and 20 components
-    dnn(pca(5, madelon))
-    dnn(pca(20, madelon))
-    dnn(ica(5, madelon))
+    dnn(ica(5, X_madelon), y_madelon, title='MADELON ICA (n=5)', saveplots=True, fileprefix='ica_n5')
+    dnn(pca(5, X_madelon), y_madelon, title='MADELON PCA (n=5)', saveplots=True, fileprefix='pca_n5')
+    dnn(pca(20, X_madelon), y_madelon, title='MADELON PCA (n=20)', saveplots=True, fileprefix='pca_n20')
+    # Run DNN on Credit dataset reduced
+    dnn(ica(5, X_madelon), y_madelon, title='MADELON ICA (n=5)', saveplots=True, fileprefix='ica_n5')
+    dnn(pca(5, X_madelon), y_madelon, title='MADELON PCA (n=5)', saveplots=True, fileprefix='pca_n5')
+    dnn(pca(20, X_madelon), y_madelon, title='MADELON PCA (n=20)', saveplots=True, fileprefix='pca_n20')
 
 
 if __name__ == '__main__':

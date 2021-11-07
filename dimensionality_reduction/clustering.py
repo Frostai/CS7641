@@ -6,7 +6,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import silhouette_score, davies_bouldin_score
+from sklearn.metrics import silhouette_score, davies_bouldin_score, homogeneity_score
 
 VERBOSE=False
 
@@ -26,10 +26,11 @@ y_credit = credit_t[:,-1]
 X_train_credit, X_test_credit, y_train_credit, y_test_credit = train_test_split(X_credit, y_credit, test_size=0.4, random_state=1)
 
 # KMEANS
-def kmeans(K, X, dataset = '', filename_prefix=''):
+def kmeans(K, X, y, dataset = '', filename_prefix=''):
     print("Start K-means", end='')
     scores = {
         'silhouette': [],
+        'homogeneity': [],
         'davies_bouldin': []
     }
     RANGE=range(2,K)
@@ -39,9 +40,10 @@ def kmeans(K, X, dataset = '', filename_prefix=''):
         kmeans.fit(X)
         scores['silhouette'].append(silhouette_score(X, kmeans.labels_))
         scores['davies_bouldin'].append(davies_bouldin_score(X, kmeans.labels_))
+        scores['homogeneity'].append(homogeneity_score(y, kmeans.labels_))
     print()
     # Plots
-    _, axes = plt.subplots(1, 2, figsize=(20, 5))
+    _, axes = plt.subplots(1, 3, figsize=(20, 5))
     
     axes[0].set_title('Silhouette Score for K-means with {} dataset'.format(dataset))
     axes[0].plot(RANGE, scores['silhouette'], label='silhouette')
@@ -52,6 +54,11 @@ def kmeans(K, X, dataset = '', filename_prefix=''):
     axes[1].plot(RANGE, scores['davies_bouldin'], label='davies_bouldin')
     axes[1].set_xlabel('K')
     axes[1].set_ylabel('Score')
+
+    axes[2].set_title('Homogeneity Score for K-means with {} dataset'.format(dataset))
+    axes[2].plot(RANGE, scores['homogeneity'], label='Homogeneity')
+    axes[2].set_xlabel('K')
+    axes[2].set_ylabel('Homogeneity Score')
     plt.savefig('figures/{}_kmeans.png'.format(filename_prefix))
     plt.clf()
 
@@ -61,7 +68,8 @@ def em(N, X, dataset = '', filename_prefix=''):
     print("Start EM", end='')
     em_scores = {
         'aic': [],
-        'bic': []
+        'bic': [],
+        'homogeneity': []
     }
     N_ARR = range(2,N)
     for n in N_ARR:
@@ -87,7 +95,7 @@ def em(N, X, dataset = '', filename_prefix=''):
 
 
 if __name__ == '__main__':
-    kmeans(50, X=X_madelon, dataset='MADELON', filename_prefix="base_madelon")
+    kmeans(50, X=X_madelon, y=y_madelon, dataset='MADELON', filename_prefix="base_madelon")
     em(50, X=X_madelon, dataset='MADELON', filename_prefix='base_madelon')
-    kmeans(50, X=X_credit, dataset='Credit', filename_prefix="base_credit")
+    kmeans(50, X=X_credit, y=y_credit, dataset='Credit', filename_prefix="base_credit")
     em(50, X=X_credit, dataset='Credit', filename_prefix='base_credit')
