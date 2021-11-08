@@ -71,14 +71,14 @@ def test_pca():
 
 def run_dnn_experiments(plots=True):
     # Run DNN on MADELON reduced
-    # Run PCA with 5 and 20 components
+    # Run PCA with 5 and 8 components
     dnn(ica(5, X_madelon), y_madelon, title='MADELON ICA (n=5)', saveplots=plots, fileprefix='ica_n5')
     dnn(pca(5, X_madelon), y_madelon, title='MADELON PCA (n=5)', saveplots=plots, fileprefix='pca_n5')
-    dnn(pca(20, X_madelon), y_madelon, title='MADELON PCA (n=20)', saveplots=plots, fileprefix='pca_n20')
+    dnn(pca(8, X_madelon), y_madelon, title='MADELON PCA (n=8)', saveplots=plots, fileprefix='pca_n8')
     # Run DNN on Credit dataset reduced
-    dnn(ica(5, X_madelon), y_madelon, title='MADELON ICA (n=5)', saveplots=plots, fileprefix='ica_n5')
-    dnn(pca(5, X_madelon), y_madelon, title='MADELON PCA (n=5)', saveplots=plots, fileprefix='pca_n5')
-    dnn(pca(20, X_madelon), y_madelon, title='MADELON PCA (n=20)', saveplots=plots, fileprefix='pca_n20')
+    dnn(ica(5, X_credit), y_credit, title='CREDIT ICA (n=5)', saveplots=plots, fileprefix='ica_n5')
+    dnn(pca(5, X_credit), y_credit, title='CREDIT PCA (n=5)', saveplots=plots, fileprefix='pca_n5')
+    dnn(pca(8, X_credit), y_credit, title='CREDIT PCA (n=8)', saveplots=plots, fileprefix='pca_n8')
 
 # Run ICA, PCA, GRP, and ___ and cluster after
 def run_experiments():
