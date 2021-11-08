@@ -75,6 +75,9 @@ def run_dnn_experiments(plots=True):
     dnn(ica(5, X_madelon), y_madelon, title='MADELON ICA (n=5)', saveplots=plots, fileprefix='ica_n5')
     dnn(pca(5, X_madelon), y_madelon, title='MADELON PCA (n=5)', saveplots=plots, fileprefix='pca_n5')
     dnn(pca(8, X_madelon), y_madelon, title='MADELON PCA (n=8)', saveplots=plots, fileprefix='pca_n8')
+    dnn(grp(8, X_madelon), y_madelon, title='MADELON GRP (n=8)', saveplots=plots, fileprefix='grp_n8')
+    dnn(kpca(8, X_madelon), y_madelon, title='MADELON KPCA (n=8)', saveplots=plots, fileprefix='kpca_n8')
+
     # Run DNN on Credit dataset reduced
     dnn(ica(5, X_credit), y_credit, title='CREDIT ICA (n=5)', saveplots=plots, fileprefix='ica_n5')
     dnn(pca(5, X_credit), y_credit, title='CREDIT PCA (n=5)', saveplots=plots, fileprefix='pca_n5')

@@ -20,3 +20,12 @@
     python3 ./optimization_dnn.py
 - Should generate plots in same directory.
 - NOTE: Some plots take a REALLY LONG time to create so they are commented.
+
+
+### How to run - Randomized optimization
+- To run, install numpy, pandas, scikit-learn and matplotlib
+- From a terminal inside the dimensionality reduction folder run:
+    python3 ./d_reduction.py
+    python3 ./clustering.py
+- Should generate plots in the figures directory.
+- NOTE: Some plots take a REALLY LONG time to create so they are commented, I miss my 5900X... :`(
