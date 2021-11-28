@@ -50,7 +50,7 @@ def kpca(n, X):
     return kpca.fit_transform(X)
 
 
-def dnn(X, y, layer_sizes=(100), title='', fileprefix='', saveplots=False):
+def dnn(X, y, layer_sizes=(1000), title='', fileprefix='', saveplots=False):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=1)
     dnn = MLPClassifier(hidden_layer_sizes=layer_sizes, random_state=1,\
     learning_rate='constant', max_iter=25000, tol=0.00005, n_iter_no_change=100, verbose=VERBOSE)
@@ -121,4 +121,4 @@ def run_experiments():
 
 if __name__ == '__main__':
     # run_experiments()
-    run_dnn_experiments(plots=False)
+    run_dnn_experiments(plots=True)
